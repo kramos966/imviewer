@@ -16,22 +16,20 @@ class MainWindow:
         # Set geometry
         #self.master.geometry("{:d}x{:d}".format(*res))
         
-        # Show folder contents
+        ## Show folder contents
         self.l1 = ttk.Label(text="Current files")
         self.l1.grid(row=0, column=0, sticky=tk.W+tk.S)
-
+        # Listbox + scrollbar
+        self.scroll = ttk.Scrollbar(self.master)
+        self.scroll.grid(row=1, column=1, 
+                rowspan=2, sticky=tk.N+tk.S)
         self.listbox = tk.Listbox(master)
-        self.listbox.bind("<Configure>", self.reset_scroll)
-        # handling the selection of the file name
         self.listbox.bind("<<ListboxSelect>>", self.handle_update)
+        self.listbox.config(yscrollcommand=self.scroll.set)
         self.fill_box()
         self.listbox.grid(row=1, column=0, 
                 rowspan=2, sticky=tk.N+tk.S)
         
-        self.scroll = ttk.Scrollbar(self.master)
-        self.scroll.config(command=self.listbox.yview)
-        self.scroll.grid(row=1, column=1, 
-                rowspan=2, sticky=tk.N+tk.S)
 
         # Image frame
         self.imframe = ImFrame(self.master, self.res)
@@ -73,27 +71,24 @@ class MainWindow:
         else:
             self.imframe.update(current_item)
 
-    def reset_scroll(self, event):
-        pass
-
     def quit(self, event):
         self.master.destroy()
         sys.exit(0)
 
 class ImFrame(ttk.Frame):
     """Frame onto which the image is shown."""
-    def __init__(self, master, res, image=None):
+    def __init__(self, master, res, imname=None):
         ttk.Frame.__init__(self, master, width=res[0], height=res[1])
         self.master = master
         self.w = res[0]
         self.h = res[1]
-        self.imtk = image
+        self.imtk = None
         self.imPIL= None
 
         # Label, actual location where the image is shown
         self.imlabel = ttk.Label(self)
-        if self.imtk:
-            self.image = self.imtk
+        if imname:
+            self.update(imname)
         self.imlabel.grid()
     
     def update(self, imname):
