@@ -12,6 +12,8 @@ class MainWindow:
         self.style = ttk.Style()
         self.style.theme_use("clam")
         self.cwd = os.getcwd()
+        self.ext = ["png", "jpg", "jpeg", "gif", "bmp",
+                "tiff"]
         # Binding exit
         self.master.bind("q", self.quit)
 
@@ -47,8 +49,7 @@ class MainWindow:
         # Check if image
         imnames = []
         for fname in fnames:
-            if fname.endswith("png") or fname.endswith("jpg") or\
-                    fname.endswith("bmp") or fname.endswith("tiff"):
+            if fname[-3:] in self.ext:
                 imnames.append(fname)
 
         # Get subfolders
