@@ -9,6 +9,8 @@ class MainWindow:
     def __init__(self, master, res):
         self.res = res
         self.master = master
+        self.style = ttk.Style()
+        self.style.theme_use("clam")
         self.cwd = os.getcwd()
         # Binding exit
         self.master.bind("q", self.quit)
@@ -34,6 +36,7 @@ class MainWindow:
         # Image frame
         self.imframe = ImFrame(self.master, self.res)
         self.imframe.grid(row=0, column=2, rowspan=3)
+        self.imframe.grid_propagate(False)  # Ignora si hi ha res dins
         
     def fill_box(self):
         # DELETE previous entries
